@@ -10,6 +10,9 @@ class App extends React.Component {
       renderBall: false
     };
     this.timerId = null;
+    this.changePosition = this.changePosition.bind(this);
+    this.startTimer = this.startTimer.bind(this);
+    this.startGame = this.startGame.bind(this);
   }
 
   componentDidMount() {
@@ -18,7 +21,7 @@ class App extends React.Component {
 
   componentWillUnmount() {}
 
-  changePosition = (event) => {
+  changePosition(event) {
     if (!this.state.renderBall) return;
 
     let xpos = this.state.x;
@@ -34,29 +37,35 @@ class App extends React.Component {
       ypos += 5;
     }
 
-    this.setState({ x: xpos, y: ypos });
-    if (this.state.x === 250 && this.state.y === 250) {
-      document.removeEventListener("keydown", this.timerId);
-    }
-  };
+    this.setState({ x: xpos, y: ypos }, () => {
+      if (xpos === 250 && ypos === 250) {
+        clearInterval(this.timerId);
+        document.removeEventListener("keydown", this.changePosition);
+      }
+    });
+  }
 
-  startTimer = () => {
-    this.setState({ time: this.time + 1 });
-  };
+  startTimer() {
+    this.setState({ time: this.state.time + 1 });
+  }
 
-  startGame = () => {
+  startGame() {
     this.setState({ renderBall: true });
     this.timerId = setInterval(this.startTimer, 1000);
-  };
+  }
 
   render() {
+    let coordinates = {
+      left: `${this.state.x}px`,
+      top: `${this.state.y}px`
+    };
     return (
       <>
-        <span className="heading-timer">{this.state.time}</span>
-        <button className="start" onClick={this.startGame()}>
+        <div className="heading-timer">{this.state.time}</div>
+        <button className="start" onClick={this.startGame}>
           Start
         </button>
-        <div className="ball"></div>
+        <div className="ball" style={coordinates}></div>
         <div className="hole"></div>
       </>
     );
