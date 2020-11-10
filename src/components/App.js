@@ -1,6 +1,6 @@
 import React, { Component, useState } from "react";
 import "../styles/App.css";
-class Timer extends React.Component {
+class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -50,21 +50,17 @@ class Timer extends React.Component {
   };
 
   render() {
-    let coordinates = {
-      x: `${this.state.x}px`,
-      y: `${this.state.y}px`
-    };
     return (
       <>
-        <div className="heading-timer">{this.state.time}</div>
+        <span className="heading-timer">{this.state.time}</span>
         <button className="start" onClick={this.startGame()}>
           Start
         </button>
-        <div className="ball"></div> {/*style={coordinates}*/}
+        <div className="ball"></div>
         <div className="hole"></div>
       </>
     );
   }
 }
 
-export default Timer;
+export default App;
